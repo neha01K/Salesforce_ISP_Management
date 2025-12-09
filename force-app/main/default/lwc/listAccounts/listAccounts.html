@@ -1,0 +1,17 @@
+<template>
+    
+    <lightning-card class="slds-p-around_small">
+
+        <template lwc:if={account.data}>
+            <template for:each={account.data} for:item="acc">
+                <p key={acc.id}>
+                    {acc.Name} - {acc.Industry}
+                </p>
+            </template>
+        </template>
+
+        <template lwc:if={account.error}>
+            <p>Error is coming in rendering</p>
+        </template>
+    </lightning-card>
+</template>

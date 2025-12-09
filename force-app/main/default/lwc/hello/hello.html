@@ -1,0 +1,20 @@
+<template>
+    <lightning-card title="Greeting">
+        <div class="slds-p-around_small">
+            Hello {data}, {greeting}
+        </div>
+    </lightning-card>
+     <lightning-input label="Enter name" value={data} onchange={handleChange}></lightning-input>
+     <div class="slds-p-around_small">
+        User Details: 
+        {name}
+        <br>
+        {title}
+        <br>
+        {experience}
+        <lightning-card title="Getter & Setter">
+            <p class="slds-p-around_x-small">{handleWorkingHours}</p>
+        </lightning-card>
+     </div>
+   
+</template>

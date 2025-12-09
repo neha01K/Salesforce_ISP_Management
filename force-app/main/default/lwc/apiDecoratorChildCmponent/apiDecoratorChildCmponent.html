@@ -1,0 +1,32 @@
+<template>
+
+    <lightning-card title="Child Component">
+        <div class="slds-p-around_small">
+            <p class="slds-p-around_x-small">{message}</p>
+        </div>
+    </lightning-card>
+
+    <template lwc:if={hasProduct}>
+
+        <lightning-card title="Container Component">
+            <div class="slds-p-around_small">
+
+                Container Component<br>
+                Did I find that product? {isProductThere}
+
+                <template for:each={foundProduct} for:item="prod">
+                    <p key={prod.id}>
+                        {prod.HairCare} - {prod.Dairy} - {prod.Snacks}
+                    </p>
+                </template>
+
+            </div>
+        </lightning-card>
+
+    </template>
+
+    <template lwc:if={parentCalled}>
+        <h2>Show that Parent called method to show this! It is not been called by the child component</h2>
+    </template>
+
+</template>

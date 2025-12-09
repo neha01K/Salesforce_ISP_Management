@@ -1,0 +1,10 @@
+<template>
+    <lightning-card title="Customers">
+        <lightning-datatable
+            key-field="id"
+            data={customers}
+            columns={columns}
+            onrowaction={handleRowAction}>
+        </lightning-datatable>
+    </lightning-card>
+</template>

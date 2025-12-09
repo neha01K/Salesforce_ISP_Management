@@ -1,0 +1,27 @@
+<template>
+    <lightning-card title="Manager Dashboard" icon-name="standard:dashboard">
+
+        <div class="slds-m-around_medium">
+            <lightning-combobox
+                label="Select Agent"
+                value={selectedAgentId}
+                options={agentOptions}
+                onchange={handleAgentChange}>
+            </lightning-combobox>
+        </div>
+
+        <div class="slds-m-around_medium">
+            <c-customer-list
+                customers={customers}
+                oncustomerselected={handleCustomerSelected}>
+            </c-customer-list>
+        </div>
+
+        <div class="slds-m-around_medium">
+            <c-plan-list
+                plans={plans}>
+            </c-plan-list>
+        </div>
+
+    </lightning-card>
+</template>
