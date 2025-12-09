@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>65.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <customErrors>
+        <name>Throw_Error_on_Failure</name>
+        <label>Throw Error on Failure</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <customErrorMessages>
+            <errorMessage>looks like the record creation failed from your flow - RT flow 2. Please review the same.</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <name>Is_Lead_Status_Changed_to_Ready_for_Closure</name>
+        <label>Is Lead Status Changed to Ready for Closure?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>No, it is not changed</defaultConnectorLabel>
+        <rules>
+            <name>Yes_It_is_changed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record__Prior.Status</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Status</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Ready for Closure</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Create_Account_Record_for_the_Lead</targetReference>
+            </connector>
+            <label>Yes, It is changed</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>RT Flow- Use case 2 - {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>RT Flow- Use case 2 - Create Related Records on Lead Closure</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Account_Record_for_the_Lead</name>
+        <label>Create Account Record for the Lead</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Create_Contact_Record_for_the_Lead</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Rating</field>
+            <value>
+                <stringValue>Hot</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Account</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Contact_Record_for_the_Lead</name>
+        <label>Create Contact Record for the Lead</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Create_Opportunity_Record_for_the_Lead</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>AccountId</field>
+            <value>
+                <elementReference>Create_Account_Record_for_the_Lead</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>LastName</field>
+            <value>
+                <elementReference>$Record.LastName</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Contact</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordCreates>
+        <name>Create_Opportunity_Record_for_the_Lead</name>
+        <label>Create Opportunity Record for the Lead</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <faultConnector>
+            <targetReference>Throw_Error_on_Failure</targetReference>
+        </faultConnector>
+        <inputAssignments>
+            <field>CloseDate</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Name</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Opportunity</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Is_Lead_Status_Changed_to_Ready_for_Closure</targetReference>
+        </connector>
+        <object>Lead</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>
